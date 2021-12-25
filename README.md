@@ -1,2 +1,1 @@
-# ever-lpr-connect
-SDK for Ever LPR Integration
+# Ever LPR Connect Library
