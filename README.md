@@ -135,8 +135,8 @@ private DeviceManagerCallback deviceCallback = new DeviceManagerCallback() {
 private DataHandlingCallback dataCallback = new DataHandlingCallback() {
     @Override public void onReadDataSuccess(ArrayList<Vehicle> vehicles) {}
     @Override public void onReadDataFailed(String errorCode) {}
-    @Override public void onWriteDataSuccess( {}
-    @Override public void onWriteDataFailed(String errorCode) {}
+    @Override public void onWriteDataSuccess(String operationMode) {}
+    @Override public void onWriteDataFailed(String operationMode, String errorCode) {}
 };
 ```
 
@@ -152,12 +152,35 @@ everLPRConnect.getStatus();
 everLPRConnect.readData();
 ```
 
-### Write data
+### Update multiple data
 
 ```java
 ArrayList<Vehicle> vehicles = new ArrayList<>();
 ...
-everLPRConnect.storeData(vehicles);
+everLPRConnect.updateMultipleData(vehicles);
+```
+
+### Update single data
+
+```java
+Vehicle vehicle = new Vehicle();
+...
+everLPRConnect.updateData(vehicle);
+```
+
+### Add single data
+
+```java
+Vehicle vehicles = new Vehicle();
+...
+everLPRConnect.addData(vehicle);
+```
+
+### Delete data
+
+```java
+...
+everLPRConnect.deleteData(vehicle.getId());
 ```
 
 # Example Code
