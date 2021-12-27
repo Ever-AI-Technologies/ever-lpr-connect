@@ -3,6 +3,8 @@ package com.ever_ai_technologies.ever_lpr_connect.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class Vehicle {
 
     private String id;
@@ -35,59 +37,76 @@ public class Vehicle {
         return "id = " + id + ", plateNo = " + plateNo;
     }
 
-    public void setId (String _id) {
+    public boolean compare(Vehicle v) {
+        if (v.getId() == this.id &&
+                v.getOwner().equals(this.owner) &&
+                v.getPlateNo().equals(this.plateNo) &&
+                v.getType().equals(this.type) &&
+                v.getBrand().equals(this.brand) &&
+                v.getManufacturedYear() == this.manufacturedYear &&
+                v.getIsBlacklisted() == this.isBlacklisted &&
+                v.getLastIn().equals(this.lastIn) &&
+                v.getLastOut().equals(this.lastOut)
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void setId(String _id) {
         id = _id;
     }
 
-    public String getId () {
+    public String getId() {
         return id;
     }
 
-    public void setOwner (String _owner) {
+    public void setOwner(String _owner) {
         owner = _owner;
     }
 
-    public String getOwner () {
+    public String getOwner() {
         return owner;
     }
 
-    public void setPlateNo (String _plateNo) {
+    public void setPlateNo(String _plateNo) {
         plateNo = _plateNo;
     }
 
-    public String getPlateNo () {
+    public String getPlateNo() {
         return plateNo;
     }
 
-    public void setType (String _type) {
+    public void setType(String _type) {
         type = _type;
     }
 
-    public String getType () {
+    public String getType() {
         return type;
     }
 
-    public void setBrand (String _brand) {
+    public void setBrand(String _brand) {
         brand = _brand;
     }
 
-    public String getBrand () {
+    public String getBrand() {
         return brand;
     }
 
-    public void setManufacturedYear (int _manufacturedYear) {
+    public void setManufacturedYear(int _manufacturedYear) {
         manufacturedYear = _manufacturedYear;
     }
 
-    public int getManufacturedYear () {
+    public int getManufacturedYear() {
         return manufacturedYear;
     }
 
-    public void setIsBlacklisted (boolean _isBlacklisted) {
+    public void setIsBlacklisted(boolean _isBlacklisted) {
         isBlacklisted = _isBlacklisted;
     }
 
-    public boolean getIsBlacklisted () {
+    public boolean getIsBlacklisted() {
         return isBlacklisted;
     }
 
@@ -95,7 +114,7 @@ public class Vehicle {
         lastIn = _lastIn;
     }
 
-    public String getLastIn () {
+    public String getLastIn() {
         return lastIn;
     }
 
@@ -103,7 +122,7 @@ public class Vehicle {
         lastOut = _lastOut;
     }
 
-    public String getLastOut () {
+    public String getLastOut() {
         return lastOut;
     }
 }

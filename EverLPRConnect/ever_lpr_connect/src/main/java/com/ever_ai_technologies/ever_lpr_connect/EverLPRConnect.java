@@ -42,6 +42,7 @@ public class EverLPRConnect {
     private Activity activity;
     private Context context;
     private UUID uuid;
+    private String deviceName;
 
     private BluetoothManager bluetoothManager;
     private BluetoothAdapter bluetoothAdapter;
@@ -56,15 +57,24 @@ public class EverLPRConnect {
     private Class readerClass;
 
     public EverLPRConnect(Context context) {
-        initialize(context, UUID.fromString(DEFAULT_UUID));
+        initialize(context, DEVICE_NAME, UUID.fromString(DEFAULT_UUID));
+    }
+
+    public EverLPRConnect(Context context, String deviceName) {
+        initialize(context, deviceName, UUID.fromString(DEFAULT_UUID));
     }
 
     public EverLPRConnect(Context context, UUID uuid) {
-        initialize(context, uuid);
+        initialize(context, DEVICE_NAME, UUID.fromString(DEFAULT_UUID));
     }
 
-    private void initialize(Context context, UUID uuid) {
+    public EverLPRConnect(Context context, String deviceName, UUID uuid) {
+        initialize(context, deviceName, uuid);
+    }
+
+    private void initialize(Context context, String deviceName, UUID uuid) {
         this.context = context;
+        this.deviceName = deviceName;
         this.uuid = uuid;
         this.readerClass = LineReader.class;
         this.deviceCallback = null;
@@ -95,16 +105,24 @@ public class EverLPRConnect {
         }
     }
 
+    public void enable() {
+        if (bluetoothAdapter != null) {
+            if (!bluetoothAdapter.isEnabled()) {
+                bluetoothAdapter.enable();
+            }
+        }
+    }
+
     public void readData() {
-        connectToNameAndExecute(DEVICE_NAME, false, false, OperationEnum.READ_DATA, null);
+        connectToNameAndExecute(this.deviceName, false, false, OperationEnum.READ_DATA, null);
     }
 
     public void getStatus() {
-        connectToNameAndExecute(DEVICE_NAME, false, false, OperationEnum.GET_STATUS, null);
+        connectToNameAndExecute(this.deviceName, false, false, OperationEnum.GET_STATUS, null);
     }
 
     public void storeData(ArrayList<Vehicle> vehicles) {
-        connectToNameAndExecute(DEVICE_NAME, false, false, OperationEnum.STORE_DATA, vehicles);
+        connectToNameAndExecute(this.deviceName, false, false, OperationEnum.MASS_UPDATE_DATA, vehicles);
     }
 
     public void onStop() {
@@ -257,7 +275,7 @@ public class EverLPRConnect {
                         case OperationEnum.READ_DATA:
                             send("GET_DATA;");
                             break;
-                        case OperationEnum.STORE_DATA:
+                        case OperationEnum.MASS_UPDATE_DATA:
                             String send_str = "[";
                             for (int i = 0; i < objects.size(); i++) {
                                 if (send_str.length() > 3) {
@@ -277,7 +295,7 @@ public class EverLPRConnect {
                             }
                             send_str += "]";
 //                        send("UPDATE_DATA;[{\"id\":\"X1200\", \"owner\": \"Amri\", , \"plate_no\": \"XRF2233\", \"type\": \"\", \"brand\": \"\", \"manufactured_year\": 2000, \"is_blacklisted\": 0, \"last_in\": \"2020-10-01T12:00:10\", \"last_out\": \"2020-10-01T15:00:10\"}, {\"id\":\"X1201\", \"owner\": \"Syaza\", , \"plate_no\": \"AGF3344\", \"type\": \"\", \"brand\": \"\", \"manufactured_year\": 2000, \"is_blacklisted\": 1, \"last_in\": \"2020-10-02T12:00:10\", \"last_out\": \"2020-10-02T14:00:10\"}, {\"id\":\"X1203\", \"owner\": \"Tan Ah Beck\", , \"plate_no\": \"LPR3342\", \"type\": \"\", \"brand\": \"\", \"manufactured_year\": 2000, \"is_blacklisted\": 0, \"last_in\": \"2020-10-01T08:00:10\", \"last_out\": \"2020-10-01T09:00:10\"}]");
-                            send("UPDATE_DATA;" + send_str);
+                            send("MASS_UPDATE_DATA;" + send_str);
                             break;
                         case OperationEnum.GET_STATUS:
                             send("GET_STATUS;");
@@ -375,7 +393,7 @@ public class EverLPRConnect {
                                                     }
                                                 }
                                                 dataCallback.onReadDataSuccess(listdata);
-                                            } else if (msgCopy.getString("operation").equals("UPDATE_DATA")) {
+                                            } else if (msgCopy.getString("operation").equals("MASS_UPDATE_DATA")) {
                                                 dataCallback.onWriteDataSuccess();
                                             }
                                             break;
@@ -389,8 +407,18 @@ public class EverLPRConnect {
                                         default:
                                             break;
                                     }
+                                    disconnect();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
+                                    if (deviceCallback != null) {
+                                        ThreadHelper.run(runOnUi, activity, new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                deviceCallback.onStatusDown(e.getMessage());
+                                            }
+                                        });
+                                    }
+                                    disconnect();
                                 }
                             }
                         });
@@ -398,15 +426,14 @@ public class EverLPRConnect {
                 }
             } catch (final IOException | JSONException e) {
                 Log.d("REPLY", String.valueOf(e.getMessage()));
-                if (dataCallback != null) {
+                if (deviceCallback != null) {
                     ThreadHelper.run(runOnUi, activity, new Runnable() {
                         @Override
                         public void run() {
-                            dataCallback.onReadDataFailed(e.getMessage());
+                            deviceCallback.onStatusDown(e.getMessage());
                         }
                     });
                 }
-            } finally {
                 disconnect();
             }
         }
