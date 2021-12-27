@@ -119,6 +119,14 @@ protected void onCreate(@Nullable Bundle savedInstanceState) {
     everLPRConnect.setDeviceManagerCallback(deviceCallback);
 }
 
+@Override
+protected void onStop() {
+    ....
+    everLPRConnect.removeDataHandlingCallback();
+    everLPRConnect.removeDeviceManagerCallback();
+    ....
+}
+
 private DeviceManagerCallback deviceCallback = new DeviceManagerCallback() {
     @Override public void onStatusUp() {}
     @Override public void onStatusDown(String errorCode) {}
