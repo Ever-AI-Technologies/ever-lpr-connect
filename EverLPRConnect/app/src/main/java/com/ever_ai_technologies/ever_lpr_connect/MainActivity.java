@@ -177,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
             TextView tv8 = new TextView(this);
             tv8.setText(vehicles.get(i).getLastOut());
 
-
             row.addView(tv9);
             row.addView(tv1);
             row.addView(tv2);
@@ -187,7 +186,6 @@ public class MainActivity extends AppCompatActivity {
             row.addView(tv6);
             row.addView(tv7);
             row.addView(tv8);
-
 
             table.addView(row);
         }

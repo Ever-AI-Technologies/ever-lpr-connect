@@ -51,7 +51,7 @@ public class EverLPRConnect {
     private DataHandlingCallback dataCallback;
 
     private ReceiveThread receiveThread;
-    private boolean connected, runOnUi;
+    private boolean runOnUi;
 
     private Class readerClass;
 
@@ -69,7 +69,6 @@ public class EverLPRConnect {
         this.readerClass = LineReader.class;
         this.deviceCallback = null;
         this.bluetoothCallback = null;
-        this.connected = false;
         this.runOnUi = false;
     }
 
@@ -212,7 +211,7 @@ public class EverLPRConnect {
                     @Override
                     public void run() {
                         Log.w(getClass().getSimpleName(), e.getMessage());
-                        deviceCallback.onStatusDown("Failed to disconnect");
+                        deviceCallback.onStatusDown(DeviceErrorMsg.FAILED_WHILE_DISCONNECTED);
                     }
                 });
             }
@@ -234,7 +233,7 @@ public class EverLPRConnect {
             } catch (IOException e) {
                 if (deviceCallback != null) {
                     Log.w(getClass().getSimpleName(), e.getMessage());
-                    deviceCallback.onStatusDown("Failed to create socket");
+                    deviceCallback.onStatusDown(DeviceErrorMsg.FAILED_WHILE_CREATING_SOCKET);
                 }
             }
         }
@@ -247,7 +246,6 @@ public class EverLPRConnect {
             public void run() {
                 try {
                     socket.connect();
-                    connected = true;
 
                     // Quick create thread
                     receiveThread = new ReceiveThread(readerClass, socket, device);
@@ -293,7 +291,7 @@ public class EverLPRConnect {
                         ThreadHelper.run(runOnUi, activity, new Runnable() {
                             @Override
                             public void run() {
-                                deviceCallback.onStatusDown("Failed to create thread");
+                                deviceCallback.onStatusDown(DeviceErrorMsg.FAILED_WHILE_CREATING_THREAD);
                             }
                         });
                     }
@@ -320,7 +318,6 @@ public class EverLPRConnect {
             try {
                 out.write(data);
             } catch (final IOException e) {
-                connected = false;
                 if (deviceCallback != null) {
                     ThreadHelper.run(runOnUi, activity, new Runnable() {
                         @Override
@@ -400,7 +397,6 @@ public class EverLPRConnect {
                     }
                 }
             } catch (final IOException | JSONException e) {
-                connected = false;
                 Log.d("REPLY", String.valueOf(e.getMessage()));
                 if (dataCallback != null) {
                     ThreadHelper.run(runOnUi, activity, new Runnable() {

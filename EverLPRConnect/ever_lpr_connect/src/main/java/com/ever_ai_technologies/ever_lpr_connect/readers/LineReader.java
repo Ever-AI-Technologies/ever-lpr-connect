@@ -23,8 +23,7 @@ public class LineReader extends SocketReader {
     public JSONObject read() throws IOException, JSONException {
         String val = reader.readLine().replace("\"", "'");
         Log.d("LineReader", val);
-        if(val.length() > 0) {
-//        JSONArray jsonArray = new JSONArray("[{'id': 'X00003', 'owner': 'Ahmad Asram', 'plate_no': 'XHD8872', 'type':'', 'brand':'', 'manufactured_year':2000, 'is_blacklisted':0, 'last_in':'', 'last_out':''},{'id': 'X00004', 'owner': 'Tan Liew Hock', 'plate_no': 'ABG3344', 'type':'', 'brand':'', 'manufactured_year':2000, 'is_blacklisted':0, 'last_in':'', 'last_out':''}]");
+        if (val.length() > 0) {
             JSONObject obj = new JSONObject(val);
             Log.d("LineReader Post process", obj.toString());
             return obj;
