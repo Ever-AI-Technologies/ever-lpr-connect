@@ -7,6 +7,6 @@ import java.util.ArrayList;
 public interface DataHandlingCallback {
     void onReadDataSuccess(ArrayList<Vehicle> vehicles);
     void onReadDataFailed(String errorCode);
-    void onWriteDataSuccess();
-    void onWriteDataFailed(String errorCode);
+    void onWriteDataSuccess(String operationMode);
+    void onWriteDataFailed(String operationMode, String errorCode);
 }

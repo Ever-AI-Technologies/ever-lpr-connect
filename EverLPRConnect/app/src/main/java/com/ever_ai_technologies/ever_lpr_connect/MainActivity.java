@@ -109,16 +109,18 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReadDataFailed(String errorCode) {
             Log.d("DataHandlingCallback", "onReadDataFailed");
+            Log.d("DataHandlingCallback", errorCode);
         }
 
         @Override
-        public void onWriteDataSuccess() {
-            Log.d("DataHandlingCallback", "onWriteDataSuccess");
+        public void onWriteDataSuccess(String operationMode) {
+            Log.d("DataHandlingCallback", "onWriteDataSuccess : " + operationMode);
         }
 
         @Override
-        public void onWriteDataFailed(String errorCode) {
-            Log.d("DataHandlingCallback", "onWriteDataFailed");
+        public void onWriteDataFailed(String operationMode, String errorCode) {
+            Log.d("DataHandlingCallback", "onWriteDataFailed " + operationMode);
+            Log.d("DataHandlingCallback", errorCode);
         }
     };
 
@@ -267,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-        everLPRConnect.storeData(vehicles);
+        everLPRConnect.updateMultipleData(vehicles);
     }
 
     public Vehicle findById(String id, ArrayList<Vehicle> vehicles) {

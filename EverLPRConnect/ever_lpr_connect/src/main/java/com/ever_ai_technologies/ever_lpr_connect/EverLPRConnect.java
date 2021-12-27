@@ -121,8 +121,34 @@ public class EverLPRConnect {
         connectToNameAndExecute(this.deviceName, false, false, OperationEnum.GET_STATUS, null);
     }
 
-    public void storeData(ArrayList<Vehicle> vehicles) {
+    public void updateMultipleData(ArrayList<Vehicle> vehicles) {
         connectToNameAndExecute(this.deviceName, false, false, OperationEnum.MASS_UPDATE_DATA, vehicles);
+    }
+
+    public void addData(Vehicle vehicle) {
+        ArrayList<Vehicle> vehicles = new ArrayList<>();
+        vehicles.add(vehicle);
+        connectToNameAndExecute(this.deviceName, false, false, OperationEnum.ADD_DATA, vehicles);
+    }
+
+    public void updateData(Vehicle vehicle) {
+        ArrayList<Vehicle> vehicles = new ArrayList<>();
+        vehicles.add(vehicle);
+        connectToNameAndExecute(this.deviceName, false, false, OperationEnum.UPDATE_DATA, vehicles);
+    }
+
+    public void deleteData(Vehicle vehicle) {
+        ArrayList<Vehicle> vehicles = new ArrayList<>();
+        vehicles.add(vehicle);
+        connectToNameAndExecute(this.deviceName, false, false, OperationEnum.UPDATE_DATA, vehicles);
+    }
+
+    public void deleteData(String id) {
+        ArrayList<Vehicle> vehicles = new ArrayList<>();
+        Vehicle vehicle = new Vehicle();
+        vehicle.setId(id);
+        vehicles.add(vehicle);
+        connectToNameAndExecute(this.deviceName, false, false, OperationEnum.DELETE_DATA, vehicles);
     }
 
     public void onStop() {
@@ -297,6 +323,61 @@ public class EverLPRConnect {
 //                        send("UPDATE_DATA;[{\"id\":\"X1200\", \"owner\": \"Amri\", , \"plate_no\": \"XRF2233\", \"type\": \"\", \"brand\": \"\", \"manufactured_year\": 2000, \"is_blacklisted\": 0, \"last_in\": \"2020-10-01T12:00:10\", \"last_out\": \"2020-10-01T15:00:10\"}, {\"id\":\"X1201\", \"owner\": \"Syaza\", , \"plate_no\": \"AGF3344\", \"type\": \"\", \"brand\": \"\", \"manufactured_year\": 2000, \"is_blacklisted\": 1, \"last_in\": \"2020-10-02T12:00:10\", \"last_out\": \"2020-10-02T14:00:10\"}, {\"id\":\"X1203\", \"owner\": \"Tan Ah Beck\", , \"plate_no\": \"LPR3342\", \"type\": \"\", \"brand\": \"\", \"manufactured_year\": 2000, \"is_blacklisted\": 0, \"last_in\": \"2020-10-01T08:00:10\", \"last_out\": \"2020-10-01T09:00:10\"}]");
                             send("MASS_UPDATE_DATA;" + send_str);
                             break;
+                        case OperationEnum.UPDATE_DATA:
+                            String send_str_upd = "[";
+                            for (int i = 0; i < objects.size(); i++) {
+                                if (send_str_upd.length() > 3) {
+                                    send_str_upd += ",";
+                                }
+                                send_str_upd += "{";
+                                send_str_upd += "\"id\":\"" + (objects.get(i).getId() == null ? "" : objects.get(i).getId()) + "\",";
+                                send_str_upd += "\"owner\":\"" + (objects.get(i).getOwner() == null ? "" : objects.get(i).getOwner()) + "\",";
+                                send_str_upd += "\"plate_no\":\"" + (objects.get(i).getPlateNo() == null ? "" : objects.get(i).getPlateNo()) + "\",";
+                                send_str_upd += "\"type\":\"" + (objects.get(i).getType() == null ? "" : objects.get(i).getPlateNo()) + "\",";
+                                send_str_upd += "\"brand\":\"" + (objects.get(i).getBrand() == null ? "" : objects.get(i).getBrand()) + "\",";
+                                send_str_upd += "\"manufactured_year\":" + objects.get(i).getManufacturedYear() + ",";
+                                send_str_upd += "\"is_blacklisted\":" + (objects.get(i).getIsBlacklisted() ? "1" : "0") + ",";
+                                send_str_upd += "\"last_in\":\"" + (objects.get(i).getLastIn() == null ? "" : objects.get(i).getLastIn()) + "\",";
+                                send_str_upd += "\"last_out\":\"" + (objects.get(i).getLastOut() == null ? "" : objects.get(i).getLastOut()) + "\"";
+                                send_str_upd += "}";
+                            }
+                            send_str_upd += "]";
+                            send("UPDATE_DATA;" + send_str_upd);
+                            break;
+                        case OperationEnum.ADD_DATA:
+                            String send_str_single = "[";
+                            for (int i = 0; i < objects.size(); i++) {
+                                if (send_str_single.length() > 3) {
+                                    send_str_single += ",";
+                                }
+                                send_str_single += "{";
+                                send_str_single += "\"id\":\"" + (objects.get(i).getId() == null ? "" : objects.get(i).getId()) + "\",";
+                                send_str_single += "\"owner\":\"" + (objects.get(i).getOwner() == null ? "" : objects.get(i).getOwner()) + "\",";
+                                send_str_single += "\"plate_no\":\"" + (objects.get(i).getPlateNo() == null ? "" : objects.get(i).getPlateNo()) + "\",";
+                                send_str_single += "\"type\":\"" + (objects.get(i).getType() == null ? "" : objects.get(i).getPlateNo()) + "\",";
+                                send_str_single += "\"brand\":\"" + (objects.get(i).getBrand() == null ? "" : objects.get(i).getBrand()) + "\",";
+                                send_str_single += "\"manufactured_year\":" + objects.get(i).getManufacturedYear() + ",";
+                                send_str_single += "\"is_blacklisted\":" + (objects.get(i).getIsBlacklisted() ? "1" : "0") + ",";
+                                send_str_single += "\"last_in\":\"" + (objects.get(i).getLastIn() == null ? "" : objects.get(i).getLastIn()) + "\",";
+                                send_str_single += "\"last_out\":\"" + (objects.get(i).getLastOut() == null ? "" : objects.get(i).getLastOut()) + "\"";
+                                send_str_single += "}";
+                            }
+                            send_str_single += "]";
+                            send("ADD_DATA;" + send_str_single);
+                            break;
+                        case OperationEnum.DELETE_DATA:
+                            String send_str_add = "[";
+                            for (int i = 0; i < objects.size(); i++) {
+                                if (send_str_add.length() > 3) {
+                                    send_str_add += ",";
+                                }
+                                send_str_add += "{";
+                                send_str_add += "\"id\":\"" + (objects.get(i).getId() == null ? "" : objects.get(i).getId()) + "\"";
+                                send_str_add += "}";
+                            }
+                            send_str_add += "]";
+                            send("DELETE_DATA;" + send_str_add);
+                            break;
                         case OperationEnum.GET_STATUS:
                             send("GET_STATUS;");
                             break;
@@ -394,14 +475,26 @@ public class EverLPRConnect {
                                                 }
                                                 dataCallback.onReadDataSuccess(listdata);
                                             } else if (msgCopy.getString("operation").equals("MASS_UPDATE_DATA")) {
-                                                dataCallback.onWriteDataSuccess();
+                                                dataCallback.onWriteDataSuccess("MASS_UPDATE_DATA");
+                                            } else if (msgCopy.getString("operation").equals("UPDATE_DATA")) {
+                                                dataCallback.onWriteDataSuccess("UPDATE_DATA");
+                                            } else if (msgCopy.getString("operation").equals("ADD_DATA")) {
+                                                dataCallback.onWriteDataSuccess("ADD_DATA");
+                                            } else if (msgCopy.getString("operation").equals("DELETE_DATA")) {
+                                                dataCallback.onWriteDataSuccess("DELETE_DATA");
                                             }
                                             break;
                                         case "FAILED":
                                             if (msgCopy.getString("operation").equals("GET_DATA")) {
                                                 dataCallback.onReadDataFailed(msgCopy.getString("messages"));
+                                            } else if (msgCopy.getString("operation").equals("MASS_UPDATE_DATA")) {
+                                                dataCallback.onWriteDataFailed("MASS_UPDATE_DATA", msgCopy.getString("messages"));
                                             } else if (msgCopy.getString("operation").equals("UPDATE_DATA")) {
-                                                dataCallback.onWriteDataFailed(msgCopy.getString("messages"));
+                                                dataCallback.onWriteDataFailed("UPDATE_DATA", msgCopy.getString("messages"));
+                                            } else if (msgCopy.getString("operation").equals("ADD_DATA")) {
+                                                dataCallback.onWriteDataFailed("ADD_DATA", msgCopy.getString("messages"));
+                                            } else if (msgCopy.getString("operation").equals("DELETE_DATA")) {
+                                                dataCallback.onWriteDataFailed("DELETE_DATA", msgCopy.getString("messages"));
                                             }
                                             break;
                                         default:
