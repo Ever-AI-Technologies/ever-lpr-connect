@@ -154,17 +154,6 @@ everLPRConnect.readData();
 
 ### Write data
 
-See this post for details: https://stackoverflow.com/a/25647197/5552022
-```java
-bluetooth.connectToNameWithPortTrick("name");
-bluetooth.connectToAddressWithPortTrick("address");
-bluetooth.connectToDeviceWithPortTrick(device);
-```
-
-*Should be avoided*
-	
-### Send a message
-
 ```java
 ArrayList<Vehicle> vehicles = new ArrayList<>();
 ...
