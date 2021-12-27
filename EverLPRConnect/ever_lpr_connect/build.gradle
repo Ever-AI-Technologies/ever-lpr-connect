@@ -9,7 +9,7 @@ ext {
     bintrayRepo = 'maven'
     bintrayName = 'ever-lpr-connect'
 
-    publishedGroupId = 'io.github.ever-ai-technologies.libraries'
+    publishedGroupId = 'io.github.ever-ai-technologies'
     artifact = 'ever-lpr-connect'
     libraryVersion = '0.0.1'
 
