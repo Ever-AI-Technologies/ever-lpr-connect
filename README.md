@@ -1,4 +1,4 @@
-# Ever LPR Connect Library (https://bintray.com/omaflak/maven/bluetooth/_latestVersion)
+# Ever LPR Connect Library
 
 Ever LPR Connect SDK can be used to access data from **Ever-LPR** device.
 
