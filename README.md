@@ -1,4 +1,5 @@
 # Ever LPR Connect Library
+(https://repo1.maven.org/maven2/io/github/ever-ai-technologies/ever-lpr-connect)
 
 Ever LPR Connect SDK can be used to access data from **Ever-LPR** device.
 
