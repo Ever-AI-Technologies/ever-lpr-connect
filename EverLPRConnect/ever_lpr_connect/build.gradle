@@ -5,13 +5,9 @@ plugins {
 ext {
     supportLibVersion = '31.0.0'
 
-    //Bintray Configuration
-    bintrayRepo = 'maven'
-    bintrayName = 'ever-lpr-connect'
-
     publishedGroupId = 'io.github.ever-ai-technologies'
     artifact = 'ever-lpr-connect'
-    libraryVersion = '0.0.1'
+    libraryVersion = '1.0.0'
 
     libraryName = 'Ever LPR Connect'
     libraryDescription = 'Integration to Ever LPR device.'
@@ -20,14 +16,15 @@ ext {
     gitUrl = 'https://github.com/Ever-AI-Technologies/ever-lpr-connect.git'
 
     developerId = 'everaitechnology'
-    developerName = 'Ever AI Technologies'
+    developerName = 'Ammar Abdullah'
     developerEmail = 'ammar@ever-technologies.com'
 
     licenseName = 'The Apache Software License, Version 2.0'
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
     allLicenses = ["Apache-2.0"]
-
 }
+
+apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
 
 android {
     compileSdk 31
@@ -52,6 +49,8 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    compileSdkVersion 31
+    buildToolsVersion '32.0.0 rc1'
 }
 
 dependencies {
