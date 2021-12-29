@@ -1,4 +1,4 @@
-# Ever LPR Connect Library
+# Ever LPR Connect Library [ [Download] ](https://repo1.maven.org/maven2/io/github/ever-ai-technologies/ever-lpr-connect)
 
 Ever LPR Connect SDK can be used to access data from **Ever-LPR** device.
 
@@ -7,7 +7,7 @@ Ever LPR Connect SDK can be used to access data from **Ever-LPR** device.
 Add to your gradle dependencies:
 
 ```
-implementation 'com.ever-ai-technologies.libraries:ever-lpr-connect:0.0.1'
+implementation 'io.github.ever-ai-technologies:ever-lpr-connect:1.0.0'
 ```
 
 ## Managing bluetooth permission
