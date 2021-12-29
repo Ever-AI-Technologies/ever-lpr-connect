@@ -7,4 +7,6 @@ public class OperationEnum {
     public final static int ADD_DATA = 314;
     public final static int UPDATE_DATA = 315;
     public final static int DELETE_DATA = 316;
+    public final static int GET_TIME = 317;
+    public final static int SYNC_TIME = 318;
 }

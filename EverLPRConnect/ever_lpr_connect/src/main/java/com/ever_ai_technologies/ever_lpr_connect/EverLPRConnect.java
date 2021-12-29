@@ -31,7 +31,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 public class EverLPRConnect {
@@ -149,6 +152,14 @@ public class EverLPRConnect {
         vehicle.setId(id);
         vehicles.add(vehicle);
         connectToNameAndExecute(this.deviceName, false, false, OperationEnum.DELETE_DATA, vehicles);
+    }
+
+    public void getDeviceTime() {
+        connectToNameAndExecute(this.deviceName, false, false, OperationEnum.GET_TIME, null);
+    }
+
+    public void syncDeviceTime() {
+        connectToNameAndExecute(this.deviceName, false, false, OperationEnum.SYNC_TIME, null);
     }
 
     public void onStop() {
@@ -381,6 +392,15 @@ public class EverLPRConnect {
                         case OperationEnum.GET_STATUS:
                             send("GET_STATUS;");
                             break;
+                        case OperationEnum.GET_TIME:
+                            send("GET_TIME;");
+                            break;
+                        case OperationEnum.SYNC_TIME:
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            String formattedDate = sdf.format(new Date());
+                            Log.d("TIME", formattedDate);
+                            send("SYNC_TIME;" + formattedDate);
+                            break;
                         default:
                             break;
                     }
@@ -453,7 +473,7 @@ public class EverLPRConnect {
             JSONObject msg;
             try {
                 while ((msg = reader.read()) != null) {
-                    if (dataCallback != null) {
+                    if (dataCallback != null && deviceCallback != null) {
                         final JSONObject msgCopy = msg;
                         ThreadHelper.run(runOnUi, activity, new Runnable() {
                             @Override
@@ -482,6 +502,12 @@ public class EverLPRConnect {
                                                 dataCallback.onWriteDataSuccess("ADD_DATA");
                                             } else if (msgCopy.getString("operation").equals("DELETE_DATA")) {
                                                 dataCallback.onWriteDataSuccess("DELETE_DATA");
+                                            } else if (msgCopy.getString("operation").equals("GET_TIME")) {
+                                                deviceCallback.onGetTime(msgCopy.getString("messages"));
+                                            } else if (msgCopy.getString("operation").equals("SYNC_TIME")) {
+                                                deviceCallback.onSyncTime(msgCopy.getString("messages"));
+                                            } else if (msgCopy.getString("operation").equals("GET_STATUS")) {
+                                                deviceCallback.onStatusUp(msgCopy.getString("messages"));
                                             }
                                             break;
                                         case "FAILED":
@@ -495,6 +521,8 @@ public class EverLPRConnect {
                                                 dataCallback.onWriteDataFailed("ADD_DATA", msgCopy.getString("messages"));
                                             } else if (msgCopy.getString("operation").equals("DELETE_DATA")) {
                                                 dataCallback.onWriteDataFailed("DELETE_DATA", msgCopy.getString("messages"));
+                                            } else if (msgCopy.getString("operation").equals("GET_STATUS")) {
+                                                deviceCallback.onStatusDown("System down");
                                             }
                                             break;
                                         default:

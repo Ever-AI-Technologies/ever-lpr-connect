@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +26,9 @@ import com.ever_ai_technologies.ever_lpr_connect.interfaces.DataHandlingCallback
 import com.ever_ai_technologies.ever_lpr_connect.interfaces.DeviceManagerCallback;
 import com.ever_ai_technologies.ever_lpr_connect.models.Vehicle;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -62,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         lblTotal.setText("0 items");
 
+        getDeviceTime();
     }
 
     @Override
@@ -127,13 +132,24 @@ public class MainActivity extends AppCompatActivity {
     private DeviceManagerCallback deviceCallback = new DeviceManagerCallback() {
 
         @Override
-        public void onStatusUp() {
-            Log.d("DeviceManagerCallback", "Device is up");
+        public void onStatusUp(String status) {
+            Log.d("DeviceManagerCallback", status);
         }
 
         @Override
         public void onStatusDown(String errorCode) {
             Log.d("DeviceManagerCallback", errorCode);
+        }
+
+        @Override
+        public void onGetTime(String dateTime) {
+            Log.d("DeviceManagerCallback", dateTime);
+        }
+
+        @Override
+        public void onSyncTime(String syncStatus) {
+            Log.d("DeviceManagerCallback", syncStatus);
+            getDeviceTime();
         }
 
     };
@@ -238,6 +254,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void getStatus(View view) {
         everLPRConnect.getStatus();
+    }
+
+    public void getDeviceTime() {
+        final Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                everLPRConnect.getDeviceTime();
+            }
+        }, 1000);
+    }
+
+    public void syncDeviceTime(View view) {
+        everLPRConnect.syncDeviceTime();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
