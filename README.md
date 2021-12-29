@@ -128,8 +128,10 @@ protected void onStop() {
 }
 
 private DeviceManagerCallback deviceCallback = new DeviceManagerCallback() {
-    @Override public void onStatusUp() {}
+    @Override public void onStatusUp(String status) {}
     @Override public void onStatusDown(String errorCode) {}
+    @Override public void onGetTime(String dateTime) {}
+    @Override public void onSyncTime(String syncStatus) {}
 };
 
 private DataHandlingCallback dataCallback = new DataHandlingCallback() {
@@ -181,6 +183,20 @@ everLPRConnect.addData(vehicle);
 ```java
 ...
 everLPRConnect.deleteData(vehicle.getId());
+```
+
+### Get device datetime
+
+```java
+...
+everLPRConnect.getDeviceTime();
+```
+
+### Sync device datetime
+
+```java
+...
+everLPRConnect.syncDeviceTime();
 ```
 
 # Example Code
